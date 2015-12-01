@@ -14,8 +14,8 @@ namespace Symfony\Bridge\Propel1\Form\ChoiceList;
 use Symfony\Bridge\Propel1\Form\Type\ModelType;
 use Symfony\Component\Form\Exception\StringCastException;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList;
-use Symfony\Component\Form\Extension\Core\DataTransformer\ChoiceToValueTransformer;
-use Symfony\Component\Form\Extension\Core\DataTransformer\ChoicesToValuesTransformer;
+//use Symfony\Component\Form\Extension\Core\DataTransformer\ChoiceToValueTransformer;
+//use Symfony\Component\Form\Extension\Core\DataTransformer\ChoicesToValuesTransformer;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -105,7 +105,10 @@ class ModelChoiceList extends ObjectChoiceList
             $this->identifier = $this->query->getTableMap()->getPrimaryKeys();
         }
 
-        $this->loaded = is_array($choices) || $choices instanceof \Traversable;
+        //@hint as of 2.8 $choices will always have array value, so commented check is not a solution
+        //$this->loaded = is_array($choices) || $choices instanceof \Traversable;
+        //@hack possible 2.8 compatible replacement
+        $this->loaded = (is_array($choices) && array() !== $choices) || $choices instanceof \Traversable;
 
         if ($preferred instanceof \ModelCriteria) {
             $this->preferredQuery = $preferred->mergeWith($this->query);
